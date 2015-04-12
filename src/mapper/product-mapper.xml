@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.ProductMapper">
+	<insert id="insertProduct" parameterType="Product"
+		useGeneratedKeys="true" keyProperty="no">
+		insert into product (name, color, price, image, content, detail, category, stock) 
+		values (#{name}, #{color}, #{price}, #{image}, #{content}, #{detail}, #{category}, #{stock}) 
+	</insert>
+	
+	<update id="deleteProduct" parameterType="Integer">
+		delete from product	where no=#{no}
+	</update>
+	
+	<select id="selectProduct" parameterType="Integer" resultMap="productMap">
+		select * from product where no=#{no}
+	</select>
+	
+	<select id="selectProductCount" resultType="Integer">
+		select count(*) from product
+	</select>
+
+	<select id="selectCategoryProductCount" parameterType="String" resultType="Integer">
+		select count(*) from product
+		where category=#{category}
+	</select>
+
+	<select id="selectProductList" parameterType="Map" resultMap="productMap">
+		select * from product
+		order by no desc limit #{firstRow}, #{rowCount}
+	</select>
+	
+	<select id="selectCategoryProductList" parameterType="Map" resultMap="productMap">
+		select * from product where category=#{category} 
+		order by no desc limit #{firstRow}, #{rowCount}
+		
+	</select>
+	
+	<resultMap type="Product" id="productMap">
+		<result property="no" column="no"/>
+		<result property="name" column="name"/>
+		<result property="color" column="color"/>
+		<result property="price" column="price"/>
+		<result property="image" column="image"/>
+		<result property="content" column="content"/>
+		<result property="detail" column="detail"/>
+		<result property="category" column="category"/>
+		<result property="stock" column="stock"/>
+	</resultMap>
+	
+</mapper>

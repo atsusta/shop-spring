@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.OrderInfoMapper">
+	<insert id="insertOrderInfo" parameterType="OrderInfo"
+		useGeneratedKeys="true" keyProperty="orderNo">
+		insert into order_info (order_date, order_quantity, customer_id, 
+			product_no, product_size, payment_type,	payment_check, 
+			shipping_message, shipping_status)
+		values (#{orderDate}, #{orderQuantity}, #{customerId}, 
+			#{productNo}, #{productSize}, #{paymentType}, #{paymentCheck},
+			#{shippingMessage}, #{shippingStatus})
+	</insert>
+	
+	<update id="updateOrderInfo" parameterType="OrderInfo">
+		update order_info set order_date=#{orderDate}, order_quantity=#{orderQuantity},
+			customer_id=#{customerId}, product_no=#{productNo}, product_size=#{productSize}, 
+			payment_type=#{paymentType}, payment_check=#{paymentCheck}, 
+			shipping_message=#{shippingMessage}, shipping_status=#{shippingStatus}
+			where order_no=#{orderNo}
+	</update>
+	
+	<delete id="deleteOrderInfo" parameterType="Integer">
+		delete from order_info 
+		where order_no=#{orderNo}
+	</delete>
+	
+	<select id="selectOrderInfo" parameterType="Integer" resultMap="orderInfoMap">
+		select * from order_info where order_no=#{orderNo}
+	</select>
+	
+	<select id="selectCustomerOrderInfoCount" parameterType="String" resultType="Integer">
+		select count(*) from order_info
+		where customer_id=#{customerId}
+	</select>
+	
+	<select id="selectLastestOrderInfo" resultMap="orderInfoMap">
+		select * from order_info 
+		order by order_no desc limit 0, 1
+	</select>
+	
+	<select id="selectOrderInfoList" resultMap="orderInfoMap">
+		select * from order_info
+	</select>
+	
+	<select id="selectCustomerOrderInfoList" parameterType="String" resultMap="orderInfoMap">
+		select * from order_info
+		where customer_id=#{customerId}
+	</select>
+	
+	<resultMap type="OrderInfo" id="orderInfoMap">
+		<result property="orderNo" column="order_no" />
+		<result property="orderDate" column="order_date" />
+		<result property="orderQuantity" column="order_quantity" />
+		<result property="customerId" column="customer_id" />
+		<result property="productNo" column="product_no" />
+		<result property="productSize" column="product_size" />
+		<result property="paymentType" column="payment_type" />
+		<result property="paymentCheck" column="payment_check" />
+		<result property="shippingMessage" column="shipping_message" />
+		<result property="shippingStatus" column="shipping_status" />
+	</resultMap>
+</mapper>

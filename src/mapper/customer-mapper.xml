@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.CustomerMapper">
+
+	<insert id="insertCustomer" parameterType="Customer">
+		insert into customer(id, password, name, phone, email, address)
+		values(#{id},#{password},#{name},#{phone},#{email},	#{address})
+	</insert>
+	
+	<update id="updateCustomer" parameterType="Customer">
+		update customer set name=#{name}, phone=#{phone}, email=#{email}, 
+				address=#{address} where id=#{id}
+	</update>
+	<update id="updateCustomerPW" parameterType="Map">
+		update customer set password = #{modifyPassword} where id = #{id}
+ 	</update>
+	
+	<delete id="deleteCustomer">
+		delete from customer where id=#{id}
+	</delete>
+	
+	<select id="selectCustomer" parameterType="String" resultMap="customerMap">
+		select * from customer where id = #{id}
+	</select>
+	
+	<select id="selectCustomerCount" resultType="Integer">
+		select count(*) from customer
+	</select>
+	
+	<select id="selectCustomerList" parameterType="Map" resultMap="customerMap">
+		select * from customer
+		 order by id desc limit #{firstRow}, #{rowCount}
+	</select>
+
+	<resultMap type="Customer" id="customerMap">
+		<result property="id" column="id"/>
+		<result property="password" column="password"/>
+		<result property="name" column="name"/>
+		<result property="phone" column="phone"/>
+		<result property="email" column="email"/>
+		<result property="address" column="address"/>
+	</resultMap>
+	
+</mapper>
