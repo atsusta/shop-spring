@@ -41,7 +41,7 @@
 		    $('#id').focus();
 		    
 		    // login avaliable when press Enter in password field
-		    $("			#password").keydown(function ( event ) {
+		    $("#password").keydown(function ( event ) {
 		    	if ( event.which == 13 ) {
 		    		login();
 		    	}
@@ -61,17 +61,52 @@
 		//  -> position is down over navbar in all device
 		//  -> .navbar-fixed-top
 		
+		// Initialize state and state machine
 		// Trigger: document ready
-		effect();
+		var navbarState;
+		if ( ($( window ).width < 992) && 
+				($( window ).scrollTop() + $('.navbar').height() <= $('.navbar').offset().top) ) {
+			navbarState = new MiddleDeviceTop();
+		} else if ( ($( window ).width >= 992) && 
+				($( window ).scrollTop() + $('.navbar').height() <= $('.navbar').offset().top) ) {
+			navbarState = new SmallDeviceTop();
+		} else if ( $( window ).scrollTop() + 
+				$('.navbar').height() <= $('.navbar').offset().top ) {
+			navbarState = new ScrollOver();
+		}
+		
+		var navbarStateMachine = new NavbarStateMachine(navbarState); 
+		navbarStateMachine.effect();
 		
 		// Trigger: window on scroll
 		$( window ).scroll(function () {
-			effect();
+			if ( $( window ).scrollTop() + $('.navbar').height() <= 
+					$('.navbar').offset().top ) {
+				
+				// fsm.setState( 'DEVICE_TOP' );
+				// fsm.effect();
+				
+			} else if ( $( window ).scrollTop() + $('.navbar').height() > 
+					$('.navbar').offset().top ) {
+				
+				// fsm.setState( 'SCROLL_OVER' );
+				// fsm.effect();
+			}
+			
 		});
 		
 		// Trigger: window on resize
 		$( window ).resize(function () {
-			effect();
+			if ( $( window ).width() < 992 ) {
+				
+				// fsm.setState( 'MIDDLE_DEVICE' );
+				// fsm.effect();
+			} else if ( $( window ).width() >= 992 ) {
+				
+				// fsm.setState( 'SMALL_DEVICE' );
+				// fsm.effect();
+			}
+			
 		});
 		
 		// login button
@@ -108,6 +143,111 @@
 	    
 	})
 	
+	// Class : NavbarStateMachine
+	// Description : State Machine for responsive navbar 
+	function NavbarStateMachine(navbarState) {
+		this.navbarState = navbarState;
+	}
+	
+	// Method : changeState(navbarState)
+	NavbarStateMachine.prototype.changeState = function (navbarState)
+	{
+		this.navbarState = navbarState;
+	}
+	
+	// Method : effect() 
+	NavbarStateMachine.prototype.effect = function ()
+	{
+		navbarState.removeClass();
+		navbarState.addClass();
+	}
+	
+	// Class : NavbarState
+	// Description : State for Navbar State Machine
+	function NavbarState() {
+		
+	}
+	
+	// Method : addClass()
+	NavbarState.prototype.addClass = function ()
+	{
+		
+	}
+	
+	// Method : removeClass()
+	NavbarState.prototype.removeClass = function ()
+	{
+		
+	}
+	
+	// Class : ScrollOver
+	// Description : Specialization of NavbarState
+	function ScrollOver () {
+		NavbarState.call(this);
+	}
+	
+	// Create a ScrollOver.prototype object that inherits from NavbarState.prototype.
+	ScrollOver.prototype = Object.create(NavbarState.prototype);
+	
+	// Set the "constructor" property to refer to NavbarState
+	ScrollOver.prototype.constructor = ScrollOver;
+	
+	// Replace the "addClass" method
+	ScrollOver.prototype.addClass = function () {
+		$( '.navbar' ).addClass( 'navbar-fixed-top' );
+	}
+	
+	// Replace the "removeClass" method
+	ScrollOver.prototype.removeClass = function () {
+		$( '.navbar' ).removeClass( 'row container' );
+	}
+	
+	// Class : MiddleDeviceTop
+	// Description : Specialization of NavbarState
+	function MiddleDeviceTop () {
+		NavbarState.call(this);
+	}
+	
+	// Create a ScrollOver.prototype object that inherits from NavbarState.prototype.
+	MiddleDeviceTop.prototype = Object.create(NavbarState.prototype);
+	
+	// Set the "constructor" property to refer to NavbarState
+	MiddleDeviceTop.prototype.constructor = MiddleDeviceTop;
+	
+	// Replace the "addClass" method
+	MiddleDeviceTop.prototype.addClass = function () {
+		$( '.navbar' ).addClass( 'container' );
+	}
+	
+	// Replace the "removeClass" method
+	MiddleDeviceTop.prototype.removeClass = function () {
+		$( '.navbar' ).removeClass( 'row navbar-fixed-top' );
+	}
+	
+	// Class : SmallDeviceTop
+	// Description : Specialization of NavbarState
+	function SmallDeviceTop () {
+		NavbarState.call(this);
+	}
+	
+	// Create a SmallDeviceTop.prototype object that inherits from NavbarState.prototype.
+	SmallDeviceTop.prototype = Object.create(NavbarState.prototype);
+	
+	// Set the "constructor" property to refer to NavbarState
+	SmallDeviceTop.prototype.constructor = SmallDeviceTop;
+	
+	// Replace the "addClass" method
+	SmallDeviceTop.prototype.addClass = function () {
+		$( '.navbar' ).addClass( 'row' );
+	}
+	
+	// Replace the "removeClass" method
+	SmallDeviceTop.prototype.removeClass = function () {
+		$( '.navbar' ).removeClass( 'container navbar-fixed-top' );
+	}
+	
+	
+	
 	// state에 따라 navbar의 css class를 정함
 	function effect() {
 		$('.navbar').removeClass('row container navbar-fixed-top');
@@ -122,16 +262,16 @@
 		// console.log("***window scroll: " + $( window ).scrollTop())
 		// console.log("resized width: " + width)
 		
-		if (( width >= 992 ) && 
-				($( window ).scrollTop() + navbarHeight <= originalNavbarOffset)) {
-			// state = "MIDDLE_DEVICE_TOP";
-			// console.log("container setted")
-			targetClass = "container";
-		} else if (( width < 992 ) && 
-				($( window ).scrollTop() + navbarHeight <= originalNavbarOffset)) {
-			// state = "SMALL_DEVICE_TOP";
-			// console.log("row setted")
-			targetClass = "row";
+		if ($( window ).scrollTop() + navbarHeight <= originalNavbarOffset) {
+			if ( width >= 992 ) {
+				// state = "MIDDLE_DEVICE_TOP";
+				// console.log("container setted")
+				targetClass = "container";
+			} else if ( width < 992 ) {
+				// state = "SMALL_DEVICE_TOP";
+				// console.log("row setted")
+				targetClass = "row";
+			}
 		} else if ($( window ).scrollTop() + navbarHeight > originalNavbarOffset) {
 			// state = "MIDDLE_DEVICE_SCROLL_OVER";
 			// state = "SMALL_DEVICE_SCROLL_OVER";

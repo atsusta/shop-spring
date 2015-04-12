@@ -10,51 +10,59 @@
 <title>회원 가입</title>
 <script type="text/javascript">
 	// '회원가입' 버튼을 눌렀을 때
-	$(function(){
-		$('form').submit(function(){
+	$(function () {
+		$('form').submit(function () {
 			if($('#id').val() == ''){
 				alert("id를 입력하세요");
 				$('#id').focus();
 				return false;	//submit 이벤트 전송기능 막음
 			}
+			
 			if($('#password').val() == ''){
 				alert("pw를 입력하세요");
 				$('#password').focus();
 				return false;
 			}
+			
 			if($('#pw_confirm').val() == ''){
 				alert("pw를 재입력하세요");
 				$('#pw_confirm').focus();
 				return false;
 			}
+			
 			if($('#name').val() == ''){
 				alert("이름을 입력하세요");
 				$('#name').focus();
 				return false;
 			}
+			
 			if($('#phone').val() == ''){
 				alert("전화번호를 입력하세요");
 				$('#phone').focus();
 				return false;
 			}
+			
 			if($('#email').val() == ''){
 				alert("이메일을 입력하세요");
 				$('#email').focus();
 				return false;
 			}
+			
 			if($('#address').val() == ''){
 				alert("주소를 입력하세요");
 				$('#address').focus();
 				return false;
 			}
+			
 			if($('#id_result').is(':contains("가능")')){
 // 			    alert("사용가능 아이디입니다.");
 			    $('#id_result').text("사용가능 아이디입니다.").css("color", "blue");
 			    return true;
 			}
+			
 			if($('#id_result').val() == '' ){
-				$('#customerId').focus();
 				alert("id 중복검사는 필수입니다.");
+				$('#customerId').focus();
 				return false;
 			}
 
@@ -64,22 +72,22 @@
 	})
 	
 	// ID 중복 검사
-		$(function(){
-		$('#check_id').click(function(){
+	$(function () {
+		$('#check_id').click(function () {
 			$.ajax({
 				type: "GET",
-				url: "http://localhost:8089/Shop-spring/idCheckAjax.do",
+				url: "idCheckAjax.do",
 				data: "check_id="+$('#id').val(),
 				dataType: "text",
-				success: function(data, request, status, error){
+				success: function(data){
 					var result = "";
-					if(data == 'id_duplication'){
+					if (data == 'id_duplication') {
 						result = "중복된 아이디입니다.";
 						$('#id_result').text(result).css("color", "red");
 						$('#id').val("");
 						$('#id').focus();
 						return false;
-					}else if(data == 'id_ok'){
+					} else if (data == 'id_ok') {
 						result = "사용가능 아이디입니다.";
 						$('#id_result').text(result).css("color", "blue");
 						$('#password').focus();
@@ -94,7 +102,7 @@
 		})
 	})
 	
-	$(function(){
+	$(function () {
 		$('#pw_confirm').keyup(function(){
 			var resultpw = "";
 			if($('#password').val() != $('#pw_confirm').val()){
@@ -108,7 +116,7 @@
 	})
 	
 	// ----  reset할때 중복체크, 비번체크 메세지 없애기 ----
-	$(function(){
+	$(function () {
 		$('#reset').click(function(){
 			$('#id_result').text('')
 			$('#pw_result').text('');
@@ -116,7 +124,7 @@
 	})
 	
 	// ----  id 새로 입력 할때 중복체크 메세지 없애기 ----
-	$(function(){
+	$(function () {
 		$('#id').click(function(){
 			$('#id_result').text('')
 		})

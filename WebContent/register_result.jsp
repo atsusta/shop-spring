@@ -44,25 +44,23 @@
 				<c:otherwise>
 					<fieldset>
 						<legend>
-							<b>가입처리가 잘 되었습니다.<br>
-								writing success...</b>			
+							회원 가입이 완료되었습니다.
 						</legend>
-						
 					</fieldset>	
 						<c:choose>
 							<c:when test="${sessionScope.customerId != admin }">
 								<div class="form-group">
 									<div class="col-lg-10 col-lg-offset-2">
-										<input type="button" value="내정보 확인" name="goMydetail" class="btn btn-primary" id="home" onclick="location.href='/Shop-spring/myDetail.do?id=${sessionScope.customerId}'"/>
-										<input type="button" value="홈으로" name="goshop" class="btn btn-success" id="home" onclick="location.href='/Shop-spring/product.do'"/><br>
+										<input type="button" value="내정보 확인" name="goMydetail" class="btn btn-primary" id="home" onclick="location.href='customerDetail.do?id=${sessionScope.customerId }'">
+										<input type="button" value="홈으로" name="goshop" class="btn btn-success" id="home" onclick="location.href='product.do'">
 									</div>
 								</div>
 							</c:when>	
 							<c:otherwise>
 								<div class="form-group">	
 									<div class="col-lg-10 col-lg-offset-2">
-										<input type="button" value="내정보 확인" name="goMydetail" class="btn btn-primary" id="home" onclick="location.href='/Shop-spring/myDetail.do?id=${sessionScope.customerId}'"/>
-										<input type="button" value="고객리스트" name="goCustomerList" class="btn btn-default" id="home" onclick="location.href='/Shop-spring/customerList.do?page=1'"/><br>
+										<input type="button" value="내정보 확인" name="goMydetail" class="btn btn-primary" id="home" onclick="location.href='customerDetail.do?id=${sessionScope.customerId }'">
+										<input type="button" value="고객리스트" name="goCustomerList" class="btn btn-default" id="home" onclick="location.href='customerList.do?page=1'">
 									</div>
 								</div>
 							</c:otherwise>
