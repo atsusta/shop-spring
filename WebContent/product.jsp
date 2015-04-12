@@ -116,17 +116,19 @@
 		$( window ).resize(function () {
 			if ( $( window ).width() >= 992 ) {
 				
-				if ( !( navbarStaeMachine.navbarState instanceof 
-						MiddleDeviceTop ) ) {
+				if ( navbarStaeMachine.navbarState instanceof 
+						SmallDeviceTop ) {
 					// if window size is enlarged to 'middle'
+					// go through when navbar fixed to top
 					navbarStateMachine.effect( new MiddleDeviceTop() );
 				}
 				
 			} else if ( $( window ).width() < 992 ) {
 				
-				if ( !( navbarStaeMachine.navbarState instanceof 
-						SmallDeviceTop ) ) {
+				if ( navbarStaeMachine.navbarState instanceof 
+						MiddleDeviceTop ) {
 					// if window size is shrinked to 'small'
+					// go through when navbar fixed to top
 					navbarStateMachine.effect( new SmallDeviceTop() );
 				}
 			}
