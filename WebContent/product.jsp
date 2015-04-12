@@ -50,61 +50,85 @@
 		})
 		
 		// responsive Navigation bar
-		// states :
-		// 1. MIDDLE_DEVICE_TOP
-		//  -> position is top of window in width >= 992
-		//  -> .container
-		// 2. SMALL_DEVICE_TOP
-		//  -> position is top of window in width < 992
-		//  -> .row
-		// 3. SCROLL_OVER
-		//  -> position is down over navbar in all device
-		//  -> .navbar-fixed-top
 		
-		// Initialize state and state machine
 		// Trigger: document ready
+		// Initialize state and state machine
 		var navbarState;
-		if ( ($( window ).width < 992) && 
-				($( window ).scrollTop() + $('.navbar').height() <= $('.navbar').offset().top) ) {
+		if ( ( $( window ).width >= 992 ) && 
+				( $( window ).scrollTop() + $('.navbar').height() <= 
+					$('.navbar').offset().top) ) {
+			// if window width is 'middle' and navbar appears in current window
 			navbarState = new MiddleDeviceTop();
-		} else if ( ($( window ).width >= 992) && 
-				($( window ).scrollTop() + $('.navbar').height() <= $('.navbar').offset().top) ) {
+		} else if ( ($( window ).width < 992) && 
+				( $( window ).scrollTop() + $('.navbar').height() <= 
+					$('.navbar').offset().top) ) {
+			// if window width is 'small' and navbar appears in current window
 			navbarState = new SmallDeviceTop();
 		} else if ( $( window ).scrollTop() + 
 				$('.navbar').height() <= $('.navbar').offset().top ) {
+			// if navbar doesn't appears in current window
 			navbarState = new ScrollOver();
 		}
 		
-		var navbarStateMachine = new NavbarStateMachine(navbarState); 
-		navbarStateMachine.effect();
+		var navbarStateMachine = new NavbarStateMachine( navbarState ); 
+		navbarStateMachine.effect( navbarState );
 		
 		// Trigger: window on scroll
+		// take effect and change state
 		$( window ).scroll(function () {
-			if ( $( window ).scrollTop() + $('.navbar').height() <= 
-					$('.navbar').offset().top ) {
+			if ( ($( window ).width() >= 992 ) && 
+					( $( window ).scrollTop() + $('.navbar').height() <= 
+						$( '.navbar' ).offset().top ) ) {
+				// if window width becomes bigger and navbar appears in current window
+				if ( !( navbarStateMachine.navbarState 
+						instanceof MiddleDeviceTop ) ) {
+					// when current state is middle device and 
+					// top window, just go through
+					navbarStateMachine.effect( new MiddleDeviceTop() );
+				}
 				
-				// fsm.setState( 'DEVICE_TOP' );
-				// fsm.effect();
+			} else if ( ($( window ).width() < 992 ) &&
+					( $( window ).scrollTop() + $('.navbar').height() <= 
+						$( '.navbar' ).offset().top ) ) {
+				// if window width becomes smaller and navbar appears in current window
+				if ( !( navbarStateMachine.navbarState instanceof 
+						SmallDeviceTop ) ) {
+					// when current state is small device and 
+					// top window, just go through
+					navbarStateMachine.effect( new SmallDeviceTop() );
+				}
 				
 			} else if ( $( window ).scrollTop() + $('.navbar').height() > 
-					$('.navbar').offset().top ) {
-				
-				// fsm.setState( 'SCROLL_OVER' );
-				// fsm.effect();
+					$( '.navbar' ).offset().top ) {
+				// if navbar doesn't appears in current window
+				if ( !( navbarStateMachine.navbarState instanceof 
+						ScrollOver ) ) {
+					// when current state is scrolled over
+					// (navbar doesn't appear in current window), just go through
+					navbarStateMachine.effect( new ScrollOver() );
+				}
 			}
 			
 		});
 		
 		// Trigger: window on resize
+		// take effect and change state
 		$( window ).resize(function () {
-			if ( $( window ).width() < 992 ) {
+			if ( $( window ).width() >= 992 ) {
 				
-				// fsm.setState( 'MIDDLE_DEVICE' );
-				// fsm.effect();
-			} else if ( $( window ).width() >= 992 ) {
+				if ( !( navbarStaeMachine.navbarState instanceof 
+						MiddleDeviceTop ) ) {
+					// if window size is enlarged to 'middle'
+					navbarStateMachine.effect( new MiddleDeviceTop() );
+				}
 				
-				// fsm.setState( 'SMALL_DEVICE' );
-				// fsm.effect();
+			} else if ( $( window ).width() < 992 ) {
+				
+				if ( !( navbarStaeMachine.navbarState instanceof 
+						SmallDeviceTop ) ) {
+					// if window size is shrinked to 'small'
+					navbarStateMachine.effect( new SmallDeviceTop() );
+				}
 			}
 			
 		});
@@ -156,10 +180,9 @@
 	}
 	
 	// Method : effect() 
-	NavbarStateMachine.prototype.effect = function ()
+	NavbarStateMachine.prototype.effect = function (newState)
 	{
-		navbarState.removeClass();
-		navbarState.addClass();
+		navbarState.effect(this, newState);
 	}
 	
 	// Class : NavbarState
@@ -180,14 +203,24 @@
 		
 	}
 	
+	// Method : effect()
+	NavbarState.prototype.effect = function (NavbarStateMachine, newState)
+	{
+		newState.removeClass();
+		newState.addClass();
+		NavbarStateMachine.changeState( newState );
+	}
+	
 	// Class : ScrollOver
 	// Description : Specialization of NavbarState
+	//  -> position is down over navbar in all device
+	//  -> .navbar-fixed-top
 	function ScrollOver () {
-		NavbarState.call(this);
+		NavbarState.call( this );
 	}
 	
 	// Create a ScrollOver.prototype object that inherits from NavbarState.prototype.
-	ScrollOver.prototype = Object.create(NavbarState.prototype);
+	ScrollOver.prototype = Object.create( NavbarState.prototype );
 	
 	// Set the "constructor" property to refer to NavbarState
 	ScrollOver.prototype.constructor = ScrollOver;
@@ -204,12 +237,14 @@
 	
 	// Class : MiddleDeviceTop
 	// Description : Specialization of NavbarState
+	//  -> position is top of window in width >= 992
+	//  -> .container
 	function MiddleDeviceTop () {
 		NavbarState.call(this);
 	}
 	
 	// Create a ScrollOver.prototype object that inherits from NavbarState.prototype.
-	MiddleDeviceTop.prototype = Object.create(NavbarState.prototype);
+	MiddleDeviceTop.prototype = Object.create( NavbarState.prototype );
 	
 	// Set the "constructor" property to refer to NavbarState
 	MiddleDeviceTop.prototype.constructor = MiddleDeviceTop;
@@ -226,8 +261,10 @@
 	
 	// Class : SmallDeviceTop
 	// Description : Specialization of NavbarState
+	//  -> position is top of window in width < 992
+	//  -> .row
 	function SmallDeviceTop () {
-		NavbarState.call(this);
+		NavbarState.call( this );
 	}
 	
 	// Create a SmallDeviceTop.prototype object that inherits from NavbarState.prototype.
@@ -247,40 +284,39 @@
 	}
 	
 	
-	
 	// state에 따라 navbar의 css class를 정함
-	function effect() {
-		$('.navbar').removeClass('row container navbar-fixed-top');
-		
-		var width = $( window ).width();
-		var originalNavbarOffset = $('.navbar').offset().top;
-		var navbarHeight = $('.navbar').height();
-		var targetClass;
-		
-		// console.log("navbar height: " + navbarHeight)
-		// console.log("navbar offset: " + originalNavbarOffset)
-		// console.log("***window scroll: " + $( window ).scrollTop())
-		// console.log("resized width: " + width)
-		
-		if ($( window ).scrollTop() + navbarHeight <= originalNavbarOffset) {
-			if ( width >= 992 ) {
-				// state = "MIDDLE_DEVICE_TOP";
-				// console.log("container setted")
-				targetClass = "container";
-			} else if ( width < 992 ) {
-				// state = "SMALL_DEVICE_TOP";
-				// console.log("row setted")
-				targetClass = "row";
-			}
-		} else if ($( window ).scrollTop() + navbarHeight > originalNavbarOffset) {
-			// state = "MIDDLE_DEVICE_SCROLL_OVER";
-			// state = "SMALL_DEVICE_SCROLL_OVER";
-			// console.log("top fixed")
-			targetClass = "navbar-fixed-top";
-		}
-		
-		$('.navbar').addClass(targetClass);
-	}
+	// function effect() {
+	// 	$('.navbar').removeClass('row container navbar-fixed-top');
+	// 	
+	// 	var width = $( window ).width();
+	// 	var originalNavbarOffset = $('.navbar').offset().top;
+	// 	var navbarHeight = $('.navbar').height();
+	// 	var targetClass;
+	// 	
+	// 	// console.log("navbar height: " + navbarHeight)
+	// 	// console.log("navbar offset: " + originalNavbarOffset)
+	// 	// console.log("***window scroll: " + $( window ).scrollTop())
+	// 	// console.log("resized width: " + width)
+	// 	
+	// 	if ($( window ).scrollTop() + navbarHeight <= originalNavbarOffset) {
+	// 		if ( width >= 992 ) {
+	// 			// state = "MIDDLE_DEVICE_TOP";
+	// 			// console.log("container setted")
+	// 			targetClass = "container";
+	// 		} else if ( width < 992 ) {
+	// 			// state = "SMALL_DEVICE_TOP";
+	// 			// console.log("row setted")
+	// 			targetClass = "row";
+	// 		}
+	// 	} else if ($( window ).scrollTop() + navbarHeight > originalNavbarOffset) {
+	// 		// state = "MIDDLE_DEVICE_SCROLL_OVER";
+	// 		// state = "SMALL_DEVICE_SCROLL_OVER";
+	// 		// console.log("top fixed")
+	// 		targetClass = "navbar-fixed-top";
+	// 	}
+	// 	
+	// 	$('.navbar').addClass(targetClass);
+	// }
 	
 	function login() {
 	    if ($('#id').val() == "" || $('#password').val() == "") {
