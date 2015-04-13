@@ -1,6 +1,7 @@
 /**
- * Navigation bar State Machine for bootstrap 3
- * Using GOF Design Pattern 'State'
+ * Responsive Navigation bar State Machine for bootstrap 3
+ * Using GOF Design Pattern 'State'.
+ * A Scroll gets down to original location of Navigation bar, Navbar go to fixed to top.
  * Copyright 2015 usta (https://github.com/atsusta/shop-spring.git)
  */
 
