@@ -22,6 +22,7 @@
 	<!-- load additional resources(stylesheet, font, javascript) -->
 	<mvc:resources location="/bootstrap/" mapping="/bootstrap/**" />
 	<mvc:resources location="/img/" mapping="/img/**" />
+	<mvc:resources location="/js/" mapping="/js/**" />
 	<mvc:annotation-driven />
 	
 </beans>

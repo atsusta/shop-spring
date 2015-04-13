@@ -14,9 +14,9 @@
 	<!-- Data Source can be changed -->
 	<bean id="dataSource" class="org.apache.tomcat.dbcp.dbcp.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/shop" />
+		<property name="url" value="jdbc:mysql://203.236.209.174:3306/shop" />
 		<property name="username" value="root" />
-		<property name="password" value="mmmm" />
+		<property name="password" value="hanbit" />
 	</bean>
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />

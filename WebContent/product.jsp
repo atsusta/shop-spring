@@ -9,6 +9,7 @@
 <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
 <script src="http://code.jquery.com/jquery-2.1.3.js"></script>
 <script src="bootstrap/js/bootstrap.js"></script>
+<script src="js/navbar-state-machine.js"></script>
 <script type="text/javascript">
 	$( document ).ready(function () {
 		// acvitate when clicking Nav
@@ -48,93 +49,6 @@
 		    })
 		    
 		})
-		
-		// responsive Navigation bar
-		
-		// Trigger: document ready
-		// Initialize state and state machine
-		var navbarState;
-		if ( ( $( window ).width >= 992 ) && 
-				( $( window ).scrollTop() + $('.navbar').height() <= 
-					$('.navbar').offset().top) ) {
-			// if window width is 'middle' and navbar appears in current window
-			navbarState = new MiddleDeviceTop();
-		} else if ( ($( window ).width < 992) && 
-				( $( window ).scrollTop() + $('.navbar').height() <= 
-					$('.navbar').offset().top) ) {
-			// if window width is 'small' and navbar appears in current window
-			navbarState = new SmallDeviceTop();
-		} else if ( $( window ).scrollTop() + 
-				$('.navbar').height() <= $('.navbar').offset().top ) {
-			// if navbar doesn't appears in current window
-			navbarState = new ScrollOver();
-		}
-		
-		var navbarStateMachine = new NavbarStateMachine( navbarState ); 
-		navbarStateMachine.effect( navbarState );
-		
-		// Trigger: window on scroll
-		// take effect and change state
-		$( window ).scroll(function () {
-			if ( ($( window ).width() >= 992 ) && 
-					( $( window ).scrollTop() + $('.navbar').height() <= 
-						$( '.navbar' ).offset().top ) ) {
-				// if window width becomes bigger and navbar appears in current window
-				if ( !( navbarStateMachine.navbarState 
-						instanceof MiddleDeviceTop ) ) {
-					// when current state is middle device and 
-					// top window, just go through
-					navbarStateMachine.effect( new MiddleDeviceTop() );
-				}
-				
-			} else if ( ($( window ).width() < 992 ) &&
-					( $( window ).scrollTop() + $('.navbar').height() <= 
-						$( '.navbar' ).offset().top ) ) {
-				// if window width becomes smaller and navbar appears in current window
-				if ( !( navbarStateMachine.navbarState instanceof 
-						SmallDeviceTop ) ) {
-					// when current state is small device and 
-					// top window, just go through
-					navbarStateMachine.effect( new SmallDeviceTop() );
-				}
-				
-			} else if ( $( window ).scrollTop() + $('.navbar').height() > 
-					$( '.navbar' ).offset().top ) {
-				// if navbar doesn't appears in current window
-				if ( !( navbarStateMachine.navbarState instanceof 
-						ScrollOver ) ) {
-					// when current state is scrolled over
-					// (navbar doesn't appear in current window), just go through
-					navbarStateMachine.effect( new ScrollOver() );
-				}
-			}
-			
-		});
-		
-		// Trigger: window on resize
-		// take effect and change state
-		$( window ).resize(function () {
-			if ( $( window ).width() >= 992 ) {
-				
-				if ( navbarStaeMachine.navbarState instanceof 
-						SmallDeviceTop ) {
-					// if window size is enlarged to 'middle'
-					// go through when navbar fixed to top
-					navbarStateMachine.effect( new MiddleDeviceTop() );
-				}
-				
-			} else if ( $( window ).width() < 992 ) {
-				
-				if ( navbarStaeMachine.navbarState instanceof 
-						MiddleDeviceTop ) {
-					// if window size is shrinked to 'small'
-					// go through when navbar fixed to top
-					navbarStateMachine.effect( new SmallDeviceTop() );
-				}
-			}
-			
-		});
-		
 		// login button
 		$("#loginTrigger").click(function () {
 			login();
@@ -167,42 +81,142 @@
 	    	return false;
 	    })
 	    
+		// Responsive Navigation bar
+		// Get original navbar offset and height
+		var originalNavbarOffset = $('.navbar').offset().top;
+	    var navbarHeight = $('.navbar').height();
+		    
+		// Trigger: document ready
+		// Initialize state and state machine
+		var navbarState;
+		console.log($( window ).width())
+		if ( ( $( window ).scrollTop() + $('.navbar').height() <= 
+				$('.navbar').offset().top ) ) {
+		    
+		    if ( $( window ).width() >= 992 ) {
+				// if window width is 'middle' and navbar appears in current window
+				navbarState = new MiddleDeviceTop();
+		    } else {
+				// if window width is 'small' and navbar appears in current window
+			    navbarState = new SmallDeviceTop();
+		    }
+		    
+		} else if ( $( window ).scrollTop() + $('.navbar').height() > 
+				$('.navbar').offset().top ) {
+			// if navbar doesn't appears in current window
+		    navbarState = new ScrollOver();
+		}
+		
+		var navbarStateMachine = new NavbarStateMachine( navbarState ); 
+		navbarStateMachine.effect( navbarState );
+		
+		// Trigger: window on scroll
+		// Change state and take effect
+		$( window ).scroll(function () {
+			if ( $( window ).scrollTop() + navbarHeight <= originalNavbarOffset ) {
+				
+			    if ( $( window ).width() >= 992 ) {
+					
+					// if window width becomes bigger and navbar appears in current window
+					if ( !( navbarStateMachine.navbarState instanceof
+							MiddleDeviceTop ) ) {
+						// when current state is middle device and 
+						// top window, just go through
+						navbarStateMachine.effect( new MiddleDeviceTop() );
+						console.log("navbar morphed into container")
+					}
+					
+			    } else {
+					
+					// if window width becomes smaller and navbar appears in current window
+					if ( !( navbarStateMachine.navbarState instanceof 
+							SmallDeviceTop ) ) {
+						// when current state is small device and 
+						// top window, just go through
+						navbarStateMachine.effect( new SmallDeviceTop() );
+						console.log("navbar morphed into row")
+					}				
+				
+			    }
+			    
+			} else if ( $( window ).scrollTop() + navbarHeight > originalNavbarOffset ) {
+				
+			    // if navbar doesn't appears in current window
+				if ( !( navbarStateMachine.navbarState instanceof 
+						ScrollOver ) ) {
+					// when current state is scrolled over
+					// (navbar doesn't appear in current window), just go through
+					navbarStateMachine.effect( new ScrollOver() );
+					console.log("navbar fixed to top")
+				}
+			}
+			
+		});
+		
+		// Trigger: window on resize
+		// Change state and take effect 
+		$( window ).resize(function () {
+			if ( $( window ).width() >= 992 ) {
+				
+				if ( navbarStateMachine.navbarState instanceof 
+						SmallDeviceTop ) {
+					// if window size is enlarged to 'middle'
+					// go through when navbar fixed to top
+					navbarStateMachine.effect( new MiddleDeviceTop() );
+					console.log("window expanded and navbar morphed into container")
+				}
+				
+			} else if ( $( window ).width() < 992 ) {
+				
+				if ( navbarStateMachine.navbarState instanceof 
+						MiddleDeviceTop ) {
+					// if window size is shrinked to 'small'
+					// go through when navbar fixed to top
+					navbarStateMachine.effect( new SmallDeviceTop() );
+					console.log("window shrinked and navbar morphed into container")
+				}
+			}
+			
+		});
+		
 	})
 	
 	// Class : NavbarStateMachine
-	// Description : State Machine for responsive navbar 
-	function NavbarStateMachine(navbarState) {
+	// Description : State Machine for responsive navbar
+	// Define the NavbarStateMachine costructor
+	var NavbarStateMachine = function NavbarStateMachine( navbarState ) {
 		this.navbarState = navbarState;
 	}
 	
 	// Method : changeState(navbarState)
-	NavbarStateMachine.prototype.changeState = function (navbarState)
+	NavbarStateMachine.prototype.changeState = function (newState)
 	{
-		this.navbarState = navbarState;
+		this.navbarState = newState;
 	}
 	
 	// Method : effect() 
 	NavbarStateMachine.prototype.effect = function (newState)
 	{
-		navbarState.effect(this, newState);
+		this.navbarState.effect(this, newState);
 	}
 	
 	// Class : NavbarState
 	// Description : State for Navbar State Machine
-	function NavbarState() {
+	// Define the NavbarState constructor
+	var NavbarState = function NavbarState() {
 		
 	}
 	
 	// Method : addClass()
 	NavbarState.prototype.addClass = function ()
 	{
-		
+		console.log("method addClass")
 	}
 	
 	// Method : removeClass()
 	NavbarState.prototype.removeClass = function ()
 	{
-		
+	    console.log("method removeClass")	
 	}
 	
 	// Method : effect()
@@ -217,6 +231,7 @@
 	// Description : Specialization of NavbarState
 	//  -> position is down over navbar in all device
 	//  -> .navbar-fixed-top
+	// Define the ScrollOver constructor
 	function ScrollOver () {
 		NavbarState.call( this );
 	}
@@ -241,8 +256,9 @@
 	// Description : Specialization of NavbarState
 	//  -> position is top of window in width >= 992
 	//  -> .container
+	// Define the MiddleDeviceTop constructor
 	function MiddleDeviceTop () {
-		NavbarState.call(this);
+		NavbarState.call( this );
 	}
 	
 	// Create a ScrollOver.prototype object that inherits from NavbarState.prototype.
@@ -265,12 +281,13 @@
 	// Description : Specialization of NavbarState
 	//  -> position is top of window in width < 992
 	//  -> .row
+	// Define the SMallDeviceTop constructor
 	function SmallDeviceTop () {
 		NavbarState.call( this );
 	}
 	
 	// Create a SmallDeviceTop.prototype object that inherits from NavbarState.prototype.
-	SmallDeviceTop.prototype = Object.create(NavbarState.prototype);
+	SmallDeviceTop.prototype = Object.create( NavbarState.prototype );
 	
 	// Set the "constructor" property to refer to NavbarState
 	SmallDeviceTop.prototype.constructor = SmallDeviceTop;
@@ -285,41 +302,6 @@
 		$( '.navbar' ).removeClass( 'container navbar-fixed-top' );
 	}
 	
-	
-	// state에 따라 navbar의 css class를 정함
-	// function effect() {
-	// 	$('.navbar').removeClass('row container navbar-fixed-top');
-	// 	
-	// 	var width = $( window ).width();
-	// 	var originalNavbarOffset = $('.navbar').offset().top;
-	// 	var navbarHeight = $('.navbar').height();
-	// 	var targetClass;
-	// 	
-	// 	// console.log("navbar height: " + navbarHeight)
-	// 	// console.log("navbar offset: " + originalNavbarOffset)
-	// 	// console.log("***window scroll: " + $( window ).scrollTop())
-	// 	// console.log("resized width: " + width)
-	// 	
-	// 	if ($( window ).scrollTop() + navbarHeight <= originalNavbarOffset) {
-	// 		if ( width >= 992 ) {
-	// 			// state = "MIDDLE_DEVICE_TOP";
-	// 			// console.log("container setted")
-	// 			targetClass = "container";
-	// 		} else if ( width < 992 ) {
-	// 			// state = "SMALL_DEVICE_TOP";
-	// 			// console.log("row setted")
-	// 			targetClass = "row";
-	// 		}
-	// 	} else if ($( window ).scrollTop() + navbarHeight > originalNavbarOffset) {
-	// 		// state = "MIDDLE_DEVICE_SCROLL_OVER";
-	// 		// state = "SMALL_DEVICE_SCROLL_OVER";
-	// 		// console.log("top fixed")
-	// 		targetClass = "navbar-fixed-top";
-	// 	}
-	// 	
-	// 	$('.navbar').addClass(targetClass);
-	// }
-	
 	function login() {
 	    if ($('#id').val() == "" || $('#password').val() == "") {
 			alert("아이디와 비밀번호를 입력하세요");
@@ -331,8 +313,8 @@
 			url: "login.do",
 			
 			// request
-//				contentType: "application/json",
-//				mimeType: "application/json",
+			// contentType: "application/json",
+			// mimeType: "application/json",
 			data: { 
 				"id": $('#id').val(), 
 				"password": $('#password').val() 
@@ -368,9 +350,9 @@
 				}
 		    },
 		    error: function (jqXHR, textStatus, errorThrown) {
-//					alert("ajax error: \n" + "data: " + jqXHR + "\n" + 
-//						"textStatus: " + textStatus + "\n" + 
-//						"errorThrown: " + errorThrown);
+				// alert("ajax error: \n" + "data: " + jqXHR + "\n" + 
+				//	"textStatus: " + textStatus + "\n" + 
+				//	"errorThrown: " + errorThrown);
 				alert("아이디 혹은 비밀번호가 잘못되었습니다.");
 		    }
 		})
@@ -384,8 +366,8 @@
 	<!-- title -->
 	<div class="jumbotron">
 		<div class="container">
-			<h1>밍규네옷방</h1>
-			<p>쎈쓰있는 언니오빠들의 쇼핑몰</p>
+			<h1>Header</h1>
+			<p>sub header</p>
 		</div>
 	</div><!-- /.title -->
 	

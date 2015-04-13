@@ -56,12 +56,12 @@
 		
 		// .clearfix code Ãß°¡
 		var contents = $("div[content]");
-		console.log(contents);
+		// console.log(contents);
 		contents.each(function () {
 			if ( ($.inArray( this, contents ) + 1) % columnSize == 0 ) {
 				$( this ).after('<div class="clearfix"></div>');
 			}
-			console.log($.inArray(this, contents));
+			// console.log($.inArray(this, contents));
 		})
 	}
 </script>
