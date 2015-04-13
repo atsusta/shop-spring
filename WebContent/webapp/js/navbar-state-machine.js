@@ -8,7 +8,7 @@
  * Function : isScrolledToTop(navbarHeight, originalNavbarOffset)
  * Description : Specify if scroll bar is on topside
  */
-function isScrolledToTop (navbarHeight, originalNavbarOffset) {
+function isScrolledToTop ( navbarHeight, originalNavbarOffset ) {
     if ( $( window ).scrollTop() + navbarHeight <= originalNavbarOffset ) {
         return true;
     } else {
@@ -20,7 +20,7 @@ function isScrolledToTop (navbarHeight, originalNavbarOffset) {
  * Function : isMiddleDevice(windowWidth)
  * Description : Specify if width of window >= 992
  */
-function isMiddleDevice (windowWidth) {
+function isMiddleDevice ( windowWidth ) {
     if ( windowWidth >= 992 )  {
         return true;
     } else {
@@ -39,15 +39,15 @@ var NavbarStateMachine = function NavbarStateMachine( navbarState ) {
 }
     
 // Method : changeState(navbarState)
-NavbarStateMachine.prototype.changeState = function (newState)
+NavbarStateMachine.prototype.changeState = function ( newState )
 {
     this.navbarState = newState;
 }
     
 // Method : effect() 
-NavbarStateMachine.prototype.effect = function (newState)
+NavbarStateMachine.prototype.effect = function ( newState )
 {
-    this.navbarState.effect(this, newState);
+    this.navbarState.effect( this, newState );
 }
 
 /**
@@ -57,23 +57,23 @@ NavbarStateMachine.prototype.effect = function (newState)
 
 // Define the NavbarState constructor
 var NavbarState = function NavbarState() {
-    
+    console.log( "constructor of NavbarState" )
 }
     
 // Method : addClass()
 NavbarState.prototype.addClass = function ()
 {
-    console.log("method addClass")
+    console.log( "method addClass" )
 }
     
 // Method : removeClass()
 NavbarState.prototype.removeClass = function ()
 {
-    console.log("method removeClass")    
+    console.log( "method removeClass" )
 }
     
 // Method : effect()
-NavbarState.prototype.effect = function (NavbarStateMachine, newState)
+NavbarState.prototype.effect = function ( NavbarStateMachine, newState )
 {
     newState.removeClass();
     newState.addClass();
