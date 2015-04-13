@@ -106,7 +106,7 @@ public class MemberController {
 	@RequestMapping(value = "/join.do")
 	public String registYackguan() {
 
-		return "customer_yackguan";
+		return "/webapp/views/customer/customer_yackguan";
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class MemberController {
 	 */
 	@RequestMapping(value = "/registForm.do", method = RequestMethod.GET)
 	public String registForm() {
-		return "register_form";
+		return "/webapp/views/customer/register_form";
 	}
 
 	/**
@@ -139,13 +139,12 @@ public class MemberController {
 		int result = customerService.write(customer);
 		System.out.println("result---" + result);
 
-		if (result < 0) {
-			mv.setViewName("register_result");
-		} else {
+		if (result > 0) {
 			mv.addObject("customer", customer);
-			mv.setViewName("register_result");
 			session.setAttribute("customerId", customer.getId());
 		}
+		
+		mv.setViewName("/webapp/views/customer/register_result");
 		return mv;
 	}
 
@@ -187,7 +186,7 @@ public class MemberController {
 		}
 
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("customer_info");
+		mv.setViewName("/webapp/views/customer/customer_info");
 		mv.addObject("customer", customer);
 		
 		return mv;
@@ -211,10 +210,10 @@ public class MemberController {
 				getCustomerOrderInfoPage(requestPage, customerId);
 		
 		// container view name
-		ModelAndView modelAndView = new ModelAndView("product");
+		ModelAndView modelAndView = new ModelAndView("/webapp/views/product/product");
 		
 		// content view name
-		modelAndView.addObject("mainContent", "my_orders.jsp");
+		modelAndView.addObject("mainContent", "/webapp/views/customer/my_orders.jsp");
 		modelAndView.addObject("category", "myOrders");
 		modelAndView.addObject("customerOrderInfoPage", customerOrderInfoPage);
 		
@@ -227,10 +226,10 @@ public class MemberController {
 	 */
 	@RequestMapping(value = "/customerUpdateForm.do", method = RequestMethod.GET)
 	public ModelAndView updateForm(String id, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
 		Customer customer = customerService.read(id);
 
-		mv.setViewName("customer_update_form");
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/webapp/views/customer/customer_update_form");
 		mv.addObject("customer", customer);
 		return mv;
 	}
@@ -246,10 +245,9 @@ public class MemberController {
 
 		if (result > 0) {
 			request.setAttribute("id", customer.getId());
-			return "customer_update_result";
-		} else {
-			return "customer_update_result";
 		}
+		
+		return "/webapp/views/customer/customer_update_result";
 	}
 	
 	/**
@@ -259,8 +257,8 @@ public class MemberController {
 	@RequestMapping(value = "/customerPwModifyForm.do", method = RequestMethod.GET)
 	public String pwModifyForm(String id, HttpServletRequest request)
 			throws Exception {
-		// request.setAttribute("id", id);
-		return "customer_pw_modify_form";
+		
+		return "/webapp/views/customer/customer_pw_modify_form";
 	}
 	
 	/**
@@ -275,10 +273,9 @@ public class MemberController {
 
 		if (comparePassword.equals(inputedPassword)) {
 			customerService.setPwModify(id, modifyPassword);
-			return "customer_pw_modify_result";
-		} else {
-			return "customer_pw_modify_result";
 		}
+		
+		return "/webapp/views/customer/customer_pw_modify_result";
 	}
 	/**
 	 * È¸¿ø Å»ÅðÇÏ·¯°¡±â
@@ -287,7 +284,7 @@ public class MemberController {
 	@RequestMapping(value = "/customerDeleteForm.do")
 	public String delUpdateForm(String id, HttpSession session) {
 
-		return "customer_delete_form";
+		return "/webapp/views/customer/customer_delete_form";
 	}
 	/**
 	 * È¸¿ø Å»Åð
@@ -305,10 +302,9 @@ public class MemberController {
 
 			request.setAttribute("result", result);
 			request.setAttribute("id", sessionId);
-			return "customer_delete_result";
-		} else {
-			return "customer_delete_result";
 		}
+		
+		return "/webapp/views/customer/customer_delete_result";
 	}
 	
 }

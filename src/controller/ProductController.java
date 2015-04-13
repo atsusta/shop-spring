@@ -47,12 +47,12 @@ public class ProductController {
 		request.getSession().setAttribute("category", category);
 		
 		// container view name
-		ModelAndView modelAndView = new ModelAndView("product");
+		ModelAndView modelAndView = new ModelAndView("/webapp/views/product/product");
 		modelAndView.addObject("productPage", productPage);
 		modelAndView.addObject("requestPage", requestPage);
 
 		// content view name
-		modelAndView.addObject("mainContent", "list.jsp");
+		modelAndView.addObject("mainContent", "/webapp/views/product/list.jsp");
 		modelAndView.addObject("category", category);
 
 		return modelAndView;
@@ -75,7 +75,7 @@ public class ProductController {
 		modelAndView.addObject("category", request.getSession().getAttribute("category"));
 
 		// content view name
-		modelAndView.addObject("mainContent", "product_detail.jsp");
+		modelAndView.addObject("mainContent", "/webapp/views/product/product_detail.jsp");
 
 		return modelAndView;
 	}

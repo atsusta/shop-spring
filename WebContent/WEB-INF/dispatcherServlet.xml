@@ -20,9 +20,9 @@
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 	
 	<!-- load additional resources(stylesheet, font, javascript) -->
-	<mvc:resources location="/bootstrap/" mapping="/bootstrap/**" />
-	<mvc:resources location="/img/" mapping="/img/**" />
-	<mvc:resources location="/js/" mapping="/js/**" />
+	<mvc:resources location="/webapp/bootstrap/" mapping="/webapp/bootstrap/**" />
+	<mvc:resources location="/webapp/img/" mapping="/webapp/img/**" />
+	<mvc:resources location="/webapp/js/" mapping="/webapp/js/**" />
 	<mvc:annotation-driven />
 	
 </beans>

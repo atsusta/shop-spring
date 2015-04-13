@@ -7,11 +7,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-
-<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="webapp/bootstrap/css/bootstrap.css">
 <script src="http://code.jquery.com/jquery-2.1.3.js"></script>
-<script src="bootstrap/js/bootstrap.js"></script>
-
 <title>고객 리스트</title>
 <script type="text/javascript">
 

@@ -6,10 +6,10 @@
 <head>
 <title>쇼 핑 몰</title>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="webapp/bootstrap/css/bootstrap.css">
 <script src="http://code.jquery.com/jquery-2.1.3.js"></script>
-<script src="bootstrap/js/bootstrap.js"></script>
-<script src="js/navbar-state-machine.js"></script>
+<script src="webapp/bootstrap/js/bootstrap.js"></script>
+<script src="webapp/js/navbar-state-machine.js"></script>
 <script type="text/javascript">
 	$( document ).ready(function () {
 		// acvitate when clicking Nav
@@ -90,8 +90,7 @@
 		// Initialize state and state machine
 		var navbarState;
 		console.log($( window ).width())
-		if ( ( $( window ).scrollTop() + $('.navbar').height() <= 
-				$('.navbar').offset().top ) ) {
+		if ( isScrolledToTop(navbarHeight, originalNavbarOffset) ) {
 		    
 		    if ( $( window ).width() >= 992 ) {
 				// if window width is 'middle' and navbar appears in current window
@@ -101,8 +100,7 @@
 			    navbarState = new SmallDeviceTop();
 		    }
 		    
-		} else if ( $( window ).scrollTop() + $('.navbar').height() > 
-				$('.navbar').offset().top ) {
+		} else {
 			// if navbar doesn't appears in current window
 		    navbarState = new ScrollOver();
 		}
@@ -113,10 +111,9 @@
 		// Trigger: window on scroll
 		// Change state and take effect
 		$( window ).scroll(function () {
-			if ( $( window ).scrollTop() + navbarHeight <= originalNavbarOffset ) {
+			if ( isScrolledToTop(navbarHeight, originalNavbarOffset) ) {
 				
-			    if ( $( window ).width() >= 992 ) {
-					
+			    if ( isMiddleDevice( $( window ).width() ) ) {
 					// if window width becomes bigger and navbar appears in current window
 					if ( !( navbarStateMachine.navbarState instanceof
 							MiddleDeviceTop ) ) {
@@ -127,7 +124,6 @@
 					}
 					
 			    } else {
-					
 					// if window width becomes smaller and navbar appears in current window
 					if ( !( navbarStateMachine.navbarState instanceof 
 							SmallDeviceTop ) ) {
@@ -139,8 +135,7 @@
 				
 			    }
 			    
-			} else if ( $( window ).scrollTop() + navbarHeight > originalNavbarOffset ) {
-				
+			} else {
 			    // if navbar doesn't appears in current window
 				if ( !( navbarStateMachine.navbarState instanceof 
 						ScrollOver ) ) {
@@ -156,7 +151,7 @@
 		// Trigger: window on resize
 		// Change state and take effect 
 		$( window ).resize(function () {
-			if ( $( window ).width() >= 992 ) {
+			if ( isMiddleDevice( $( window ).width() ) ) {
 				
 				if ( navbarStateMachine.navbarState instanceof 
 						SmallDeviceTop ) {
@@ -166,7 +161,7 @@
 					console.log("window expanded and navbar morphed into container")
 				}
 				
-			} else if ( $( window ).width() < 992 ) {
+			} else {
 				
 				if ( navbarStateMachine.navbarState instanceof 
 						MiddleDeviceTop ) {
@@ -180,128 +175,8 @@
 		});
 		
 	})
-	
-	// Class : NavbarStateMachine
-	// Description : State Machine for responsive navbar
-	// Define the NavbarStateMachine costructor
-	var NavbarStateMachine = function NavbarStateMachine( navbarState ) {
-		this.navbarState = navbarState;
-	}
-	
-	// Method : changeState(navbarState)
-	NavbarStateMachine.prototype.changeState = function (newState)
-	{
-		this.navbarState = newState;
-	}
-	
-	// Method : effect() 
-	NavbarStateMachine.prototype.effect = function (newState)
-	{
-		this.navbarState.effect(this, newState);
-	}
-	
-	// Class : NavbarState
-	// Description : State for Navbar State Machine
-	// Define the NavbarState constructor
-	var NavbarState = function NavbarState() {
-		
-	}
-	
-	// Method : addClass()
-	NavbarState.prototype.addClass = function ()
-	{
-		console.log("method addClass")
-	}
-	
-	// Method : removeClass()
-	NavbarState.prototype.removeClass = function ()
-	{
-	    console.log("method removeClass")	
-	}
-	
-	// Method : effect()
-	NavbarState.prototype.effect = function (NavbarStateMachine, newState)
-	{
-		newState.removeClass();
-		newState.addClass();
-		NavbarStateMachine.changeState( newState );
-	}
-	
-	// Class : ScrollOver
-	// Description : Specialization of NavbarState
-	//  -> position is down over navbar in all device
-	//  -> .navbar-fixed-top
-	// Define the ScrollOver constructor
-	function ScrollOver () {
-		NavbarState.call( this );
-	}
-	
-	// Create a ScrollOver.prototype object that inherits from NavbarState.prototype.
-	ScrollOver.prototype = Object.create( NavbarState.prototype );
-	
-	// Set the "constructor" property to refer to NavbarState
-	ScrollOver.prototype.constructor = ScrollOver;
-	
-	// Replace the "addClass" method
-	ScrollOver.prototype.addClass = function () {
-		$( '.navbar' ).addClass( 'navbar-fixed-top' );
-	}
-	
-	// Replace the "removeClass" method
-	ScrollOver.prototype.removeClass = function () {
-		$( '.navbar' ).removeClass( 'row container' );
-	}
-	
-	// Class : MiddleDeviceTop
-	// Description : Specialization of NavbarState
-	//  -> position is top of window in width >= 992
-	//  -> .container
-	// Define the MiddleDeviceTop constructor
-	function MiddleDeviceTop () {
-		NavbarState.call( this );
-	}
-	
-	// Create a ScrollOver.prototype object that inherits from NavbarState.prototype.
-	MiddleDeviceTop.prototype = Object.create( NavbarState.prototype );
-	
-	// Set the "constructor" property to refer to NavbarState
-	MiddleDeviceTop.prototype.constructor = MiddleDeviceTop;
-	
-	// Replace the "addClass" method
-	MiddleDeviceTop.prototype.addClass = function () {
-		$( '.navbar' ).addClass( 'container' );
-	}
-	
-	// Replace the "removeClass" method
-	MiddleDeviceTop.prototype.removeClass = function () {
-		$( '.navbar' ).removeClass( 'row navbar-fixed-top' );
-	}
-	
-	// Class : SmallDeviceTop
-	// Description : Specialization of NavbarState
-	//  -> position is top of window in width < 992
-	//  -> .row
-	// Define the SMallDeviceTop constructor
-	function SmallDeviceTop () {
-		NavbarState.call( this );
-	}
-	
-	// Create a SmallDeviceTop.prototype object that inherits from NavbarState.prototype.
-	SmallDeviceTop.prototype = Object.create( NavbarState.prototype );
-	
-	// Set the "constructor" property to refer to NavbarState
-	SmallDeviceTop.prototype.constructor = SmallDeviceTop;
-	
-	// Replace the "addClass" method
-	SmallDeviceTop.prototype.addClass = function () {
-		$( '.navbar' ).addClass( 'row' );
-	}
-	
-	// Replace the "removeClass" method
-	SmallDeviceTop.prototype.removeClass = function () {
-		$( '.navbar' ).removeClass( 'container navbar-fixed-top' );
-	}
-	
+
+	// send id and password via ajax for login 
 	function login() {
 	    if ($('#id').val() == "" || $('#password').val() == "") {
 			alert("아이디와 비밀번호를 입력하세요");
@@ -367,7 +242,7 @@
 	<div class="jumbotron">
 		<div class="container">
 			<h1>Header</h1>
-			<p>sub header</p>
+			<p>subscription</p>
 		</div>
 	</div><!-- /.title -->
 	

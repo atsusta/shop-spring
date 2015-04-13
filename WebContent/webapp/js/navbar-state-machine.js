@@ -4,8 +4,29 @@
  * Copyright 2015 usta (https://github.com/atsusta/shop-spring.git)
  */
 
+/**
+ * Function : isScrolledToTop(navbarHeight, originalNavbarOffset)
+ * Description : Specify if scroll bar is on topside
+ */
+function isScrolledToTop (navbarHeight, originalNavbarOffset) {
+	if ( $( window ).scrollTop() + navbarHeight <= originalNavbarOffset ) {
+		return true;
+	} else {
+		return false;
+	}
+}
 
-
+/**
+ * Function : isMiddleDevice(windowWidth)
+ * Description : Specify if width of window >= 992
+ */
+function isMiddleDevice (windowWidth) {
+	if ( windowWidth >= 992 )  {
+		return true;
+	} else {
+		return false;
+	}	
+}
 
 /**
  * Class : NavbarStateMachine

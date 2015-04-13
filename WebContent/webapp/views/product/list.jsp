@@ -73,8 +73,8 @@
 			<c:forEach items="${productPage.productList }" var="product" varStatus="status">
 				<div class="col-sm-6 col-md-4 col-lg-3" content="product">
 					<div class="thumbnail">
-						<a href="./productDetail.do?&productNo=${product.no }">
-							<img src="img/${product.image }" class="img-responsive" alt="제품이미지" />
+						<a href="productDetail.do?&productNo=${product.no }">
+							<img src="webapp/img/${product.image }" class="img-responsive" alt="제품이미지" />
 						</a>
 						<div class="caption">
 							<h3>${product.name}</h3>
