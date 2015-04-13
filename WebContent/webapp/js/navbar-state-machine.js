@@ -5,7 +5,7 @@
  */
 
 /**
- * Function : isScrolledToTop(navbarHeight, originalNavbarOffset)
+ * Function : isScrolledToTop( navbarHeight, originalNavbarOffset )
  * Description : Specify if scroll bar is on topside
  */
 function isScrolledToTop ( navbarHeight, originalNavbarOffset ) {
@@ -17,7 +17,7 @@ function isScrolledToTop ( navbarHeight, originalNavbarOffset ) {
 }
 
 /**
- * Function : isMiddleDevice(windowWidth)
+ * Function : isMiddleDevice( windowWidth )
  * Description : Specify if width of window >= 992
  */
 function isMiddleDevice ( windowWidth ) {
@@ -38,13 +38,13 @@ var NavbarStateMachine = function NavbarStateMachine( navbarState ) {
     this.navbarState = navbarState;
 }
     
-// Method : changeState(navbarState)
+// Method : changeState( newState )
 NavbarStateMachine.prototype.changeState = function ( newState )
 {
     this.navbarState = newState;
 }
     
-// Method : effect() 
+// Method : effect( newState ) 
 NavbarStateMachine.prototype.effect = function ( newState )
 {
     this.navbarState.effect( this, newState );
@@ -72,7 +72,7 @@ NavbarState.prototype.removeClass = function ()
     console.log( "method removeClass" )
 }
     
-// Method : effect()
+// Method : effect( NavbarStateMachine, newState )
 NavbarState.prototype.effect = function ( NavbarStateMachine, newState )
 {
     newState.removeClass();
