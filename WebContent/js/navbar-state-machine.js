@@ -1,5 +1,6 @@
 /**
  * Navigation bar State Machine for bootstrap 3
+ * Using GOF Design Pattern 'State'
  * Copyright 2015 usta (https://github.com/atsusta/shop-spring.git)
  */
 
