@@ -9,11 +9,11 @@
  * Description : Specify if scroll bar is on topside
  */
 function isScrolledToTop (navbarHeight, originalNavbarOffset) {
-	if ( $( window ).scrollTop() + navbarHeight <= originalNavbarOffset ) {
-		return true;
-	} else {
-		return false;
-	}
+    if ( $( window ).scrollTop() + navbarHeight <= originalNavbarOffset ) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -21,11 +21,11 @@ function isScrolledToTop (navbarHeight, originalNavbarOffset) {
  * Description : Specify if width of window >= 992
  */
 function isMiddleDevice (windowWidth) {
-	if ( windowWidth >= 992 )  {
-		return true;
-	} else {
-		return false;
-	}	
+    if ( windowWidth >= 992 )  {
+        return true;
+    } else {
+        return false;
+    }	
 }
 
 /**
