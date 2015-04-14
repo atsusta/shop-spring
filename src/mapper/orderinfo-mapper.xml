@@ -42,12 +42,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectOrderInfoList" resultMap="orderInfoMap">
-		select * from order_info
+		select * from order_info order by order_no desc
 	</select>
 	
 	<select id="selectCustomerOrderInfoList" parameterType="String" resultMap="orderInfoMap">
 		select * from order_info
-		where customer_id=#{customerId}
+		where customer_id=#{customerId} order by order_no desc
 	</select>
 	
 	<resultMap type="OrderInfo" id="orderInfoMap">

@@ -168,7 +168,7 @@
 					// if window size is shrinked to 'small'
 					// go through when navbar fixed to top
 					navbarStateMachine.effect( new SmallDeviceTop() );
-					console.log("window shrinked and navbar morphed into container")
+					console.log("window shrinked and navbar morphed into row")
 				}
 			}
 			

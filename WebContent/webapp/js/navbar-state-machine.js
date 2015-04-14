@@ -58,19 +58,19 @@ NavbarStateMachine.prototype.effect = function ( newState )
 
 // Define the NavbarState constructor
 var NavbarState = function NavbarState() {
-    console.log( "constructor of NavbarState" )
+    
 }
     
 // Method : addClass()
 NavbarState.prototype.addClass = function ()
 {
-    console.log( "method addClass" )
+    
 }
     
 // Method : removeClass()
 NavbarState.prototype.removeClass = function ()
 {
-    console.log( "method removeClass" )
+    
 }
     
 // Method : effect( NavbarStateMachine, newState )

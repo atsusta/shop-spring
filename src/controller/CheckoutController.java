@@ -78,7 +78,7 @@ public class CheckoutController {
 		Customer customer = customserService.getCustomer(customerId);
 		
 		// container view name
-		ModelAndView modelAndView = new ModelAndView("product");
+		ModelAndView modelAndView = new ModelAndView("/webapp/views/product/product");
 		
 		// testing
 		System.out.println("customer is ordering the product!");
@@ -101,7 +101,7 @@ public class CheckoutController {
 		}
 		
 		// content view name
-		modelAndView.addObject("mainContent", "order.jsp");
+		modelAndView.addObject("mainContent", "/webapp/views/checkout/order.jsp");
 		
 		return modelAndView;
 	}
@@ -155,12 +155,12 @@ public class CheckoutController {
 		orderInfoService.addOrderInfo(orderInfo);
 		
 		// container view name
-		ModelAndView modelAndView = new ModelAndView("product");
+		ModelAndView modelAndView = new ModelAndView("/webapp/views/product/product");
 		modelAndView.addObject("subtotal", subtotal);
 		modelAndView.addObject("shippingPrice", shippingPrice);
 		
 		// content view name
-		modelAndView.addObject("mainContent", "payment.jsp");
+		modelAndView.addObject("mainContent", "/webapp/views/checkout/payment.jsp");
 		
 		return modelAndView;
 	}
@@ -176,10 +176,10 @@ public class CheckoutController {
 		// treat card information
 		
 		// container view name
-		ModelAndView modelAndView = new ModelAndView("product");
+		ModelAndView modelAndView = new ModelAndView("/webapp/views/product/product");
 		
 		// content view name
-		modelAndView.addObject("mainContent", "payment_success.jsp");
+		modelAndView.addObject("mainContent", "/webapp/views/checkout/payment_success.jsp");
 		
 		return modelAndView;
 	}

@@ -50,7 +50,7 @@ public class ManagementController {
 	 */
 	@RequestMapping(value = "/admin.do", method = RequestMethod.GET)
 	public ModelAndView getAdminView() {
-		ModelAndView modelAndView = new ModelAndView("admin_index");
+		ModelAndView modelAndView = new ModelAndView("/webapp/views/admin/admin_index");
 		return modelAndView;
 	}
 	
@@ -62,8 +62,8 @@ public class ManagementController {
 	public ModelAndView OrderInfoList() {
 		List<OrderInfo> orderInfoList = orderInfoService.getOrderInfoList();
 		
-		ModelAndView modelAndView = new ModelAndView("admin_index");
-		modelAndView.addObject("mainContent", "admin_order_list.jsp");
+		ModelAndView modelAndView = new ModelAndView("/webapp/views/admin/admin_index");
+		modelAndView.addObject("mainContent", "/webapp/views/admin/admin_order_list.jsp");
 		modelAndView.addObject("orderInfoList", orderInfoList);
 		modelAndView.addObject("menu", "orders");
 		
@@ -84,8 +84,8 @@ public class ManagementController {
 		CustomerPage customerPage = customerService.getCustomerPage(requestPage); 
 		session.setAttribute("totalCustomer", customerService.selectCustomerCount());
 
-		ModelAndView mv = new ModelAndView("admin_index");
-		mv.addObject("mainContent", "customer_list.jsp");
+		ModelAndView mv = new ModelAndView("/webapp/views/admin/admin_index");
+		mv.addObject("mainContent", "/webapp/views/customer/customer_list.jsp");
 		mv.addObject("customerPage", customerPage);
 		mv.addObject("menu", "customerList");
 		
@@ -105,8 +105,8 @@ public class ManagementController {
 	@RequestMapping(value = "/addNewProductForm.do", method = RequestMethod.GET)
 	public ModelAndView getAddNewProductForm() {
 		
-		ModelAndView modelAndView = new ModelAndView("admin_index");
-		modelAndView.addObject("mainContent", "admin_new_product.jsp");
+		ModelAndView modelAndView = new ModelAndView("/webapp/views/admin/admin_index");
+		modelAndView.addObject("mainContent", "/webapp/views/admin/admin_new_product.jsp");
 		modelAndView.addObject("menu", "addNewProduct");
 		
 		return modelAndView;
@@ -119,11 +119,11 @@ public class ManagementController {
 	@RequestMapping(value = "/addNewProduct.do", method = RequestMethod.POST)
 	public ModelAndView addNewProduct(Product product) {
 		
-		ModelAndView modelAndView = new ModelAndView("admin_index");
+		ModelAndView modelAndView = new ModelAndView("/webapp/views/admin/admin_index");
 		if (productService.addProduct(product)) {
-			modelAndView.addObject("mainContent", "admin_product_success.jsp");
+			modelAndView.addObject("mainContent", "/webapp/views/admin/admin_product_success.jsp");
 		} else {
-			modelAndView.addObject("mainContent", "admin_product_fail.jsp");
+			modelAndView.addObject("mainContent", "/webapp/views/admin/admin_product_fail.jsp");
 		}
 		modelAndView.addObject("menu", "addNewProduct");
 		
