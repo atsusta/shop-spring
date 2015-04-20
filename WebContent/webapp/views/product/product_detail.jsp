@@ -67,7 +67,7 @@
 		<div class="row">
 			<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-5 col-md-offset-1 text-center">
 				<!-- 송동휘: 아래 product.productImage -> product.image로 변경. -->
-				<img src="img/${product.image }" class="img-responsive" width="400" />
+				<img src="webapp/img/${product.image }" class="img-responsive" width="400" />
 			</div>
 			<div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-1">
 				<form class="form-horizontal" id="passOrderForm" action="order.do" method="post">

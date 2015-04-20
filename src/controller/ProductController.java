@@ -70,7 +70,7 @@ public class ProductController {
 		System.out.println("product: " + product);
 		
 		// container view name
-		ModelAndView modelAndView = new ModelAndView("product");
+		ModelAndView modelAndView = new ModelAndView("/webapp/views/product/product");
 		modelAndView.addObject("product", product);
 		modelAndView.addObject("category", request.getSession().getAttribute("category"));
 

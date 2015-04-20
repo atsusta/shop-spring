@@ -61,7 +61,7 @@
 					<div class="row text-center">
 						<ul class="pagination">
 							<c:if test="${customerOrderInfoPage.startPage > 1 }">
-								<li><a href="customerList.do?page=${customerOrderInfoPage.requestPage - 1 }"><<</a></li>
+								<li><a href="myOrders.do?page=${customerOrderInfoPage.requestPage - 1 }"><<</a></li>
 							</c:if>
 							<c:forEach begin="${customerOrderInfoPage.startPage }" 
 									end="${customerOrderInfoPage.endPage }" var = "i">
@@ -70,12 +70,12 @@
 										<li class="active"><a href="#">${i }</a></li>
 									</c:when>
 									<c:otherwise>
-										<li><a href="customerList.do?page=${i }">${i }</a></li>
+										<li><a href="myOrders.do?page=${i }">${i }</a></li>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
 							<c:if test="${customerOrderInfoPage.endPage < customerOrderInfoPage.totalPages }">
-								<li><a href="customerList.do?page=${customerOrderInfoPage.requestPage + 1 }">>></a></li>
+								<li><a href="myOrders.do?page=${customerOrderInfoPage.requestPage + 1 }">>></a></li>
 							</c:if>
 						</ul>
 					</div>
